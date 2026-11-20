@@ -19,14 +19,19 @@
   movement, results are announced through a live region, solved groups say
   their name and level in words, and prefers-reduced-motion turns every
   movement off (the game still plays the same).
+
+  The game rules (scoring a guess, checking saved progress, the share grid)
+  live in player/rules.js, which has no DOM and is tested in Node.
 */
+import {
+  COLORS, MAX_MISTAKES, shuffled, normalizePuzzle, guessKey, guessColors,
+  scoreGuess, restoreProgress, trimProgress, shareGrid, endSummary, parseUrl,
+} from './rules.js';
+
 (function () {
   'use strict';
 
-  const COLORS = ['Yellow', 'Green', 'Blue', 'Purple'];
-  const EMOJI = { Yellow: '\u{1F7E8}', Green: '\u{1F7E9}', Blue: '\u{1F7E6}', Purple: '\u{1F7EA}' };
   const LEVEL = { Yellow: 'level 1 of 4, yellow', Green: 'level 2 of 4, green', Blue: 'level 3 of 4, blue', Purple: 'level 4 of 4, purple' };
-  const MAX_MISTAKES = 4;
   const ROMAN = ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX', 'X'];
 
   // Theme copy: the end-of-game lines and the confetti each theme throws.
@@ -56,7 +61,6 @@
   const mq = window.matchMedia ? window.matchMedia('(prefers-reduced-motion: reduce)') : null;
   const reduced = () => Boolean(mq && mq.matches);
   const wait = ms => new Promise(r => setTimeout(r, reduced() ? 0 : ms));
-  const canon = w => String(w).toUpperCase().replace(/[^A-Z0-9]/g, '');
   const SVGNS = 'http://www.w3.org/2000/svg';
 
   function el(tag, attrs, ...kids) {
@@ -79,26 +83,6 @@
     s.setAttribute('aria-hidden', 'true');
     s.setAttribute('focusable', 'false');
     return s;
-  }
-  function shuffled(arr) {
-    const a = arr.slice();
-    for (let i = a.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [a[i], a[j]] = [a[j], a[i]];
-    }
-    return a;
-  }
-  function normalizePuzzle(p) {
-    const cats = (p.categories || []).map((c, i) => ({
-      label: String(c.label),
-      words: c.words.map(w => String(w).toUpperCase()),
-      explanation: c.explanation || '',
-      color: COLORS.includes(c.color) ? c.color : COLORS[i % 4],
-      story: c.story && c.story.url ? c.story : null,
-      definitions: Array.isArray(c.definitions) && c.definitions.length === 4 ? c.definitions.map(String) : null,
-    }));
-    cats.sort((a, b) => COLORS.indexOf(a.color) - COLORS.indexOf(b.color));
-    return { ...p, categories: cats };
   }
 
   // ---------------------------------------------------------------------
@@ -390,8 +374,7 @@
           at: Date.now(), order: S.order, solved: S.solved.map(c => ({ label: c.label, missed: Boolean(c.missed) })),
           mistakes: S.mistakes, guesses: S.guesses, guessed: [...S.guessed], over: S.over, won: S.won,
         };
-        const keys = Object.keys(all).sort((a, b) => (all[b].at || 0) - (all[a].at || 0)).slice(0, 40);
-        localStorage.setItem(PROGRESS, JSON.stringify(Object.fromEntries(keys.map(k => [k, all[k]]))));
+        localStorage.setItem(PROGRESS, JSON.stringify(trimProgress(all, 40)));
       } catch { /* storage unavailable: the game still plays */ }
     }
     function clearProgress(key) { try { const all = readAll(); delete all[key]; localStorage.setItem(PROGRESS, JSON.stringify(all)); } catch { /* fine */ } }
@@ -403,14 +386,13 @@
       S.selected = new Set(); S.solved = []; S.mistakes = 0; S.guesses = []; S.guessed = new Set();
       S.over = false; S.won = false; S.busy = false;
       if (!progress && S.pack.key) clearProgress(S.pack.key); // "Play again" starts clean
-      const words = new Set(S.order);
-      const resume = progress && Array.isArray(progress.order) && progress.order.length === S.order.length && progress.order.every(w => words.has(w)) ? progress : null;
+      const resume = restoreProgress(progress, S.order, MAX_MISTAKES);
       if (resume) {
-        S.order = resume.order.slice();
-        S.mistakes = Math.min(MAX_MISTAKES, Number(resume.mistakes) || 0);
-        S.guesses = Array.isArray(resume.guesses) ? resume.guesses : [];
-        S.guessed = new Set(Array.isArray(resume.guessed) ? resume.guessed : []);
-        S.over = Boolean(resume.over); S.won = Boolean(resume.won);
+        S.order = resume.order;
+        S.mistakes = resume.mistakes;
+        S.guesses = resume.guesses;
+        S.guessed = resume.guessed;
+        S.over = resume.over; S.won = resume.won;
       }
       renderPicker();
       kicker.textContent = S.pack.live ? S.pack.name : `${S.pack.name} · puzzle ${S.index + 1} of ${S.pack.puzzles.length}`;
@@ -433,7 +415,7 @@
       end.hidden = true; end.innerHTML = '';
       toastEl.textContent = ''; toastEl.className = 'cx-toast';
       if (resume) {
-        for (const s of resume.solved || []) {
+        for (const s of resume.solved) {
           const cat = p.categories.find(c => c.label === s.label);
           if (!cat || S.solved.includes(cat)) continue;
           cat.missed = Boolean(s.missed);
@@ -638,22 +620,19 @@
       tiles.forEach(t => t.classList.remove('cx-wrong'));
     }
 
-    function catOf(word) { return S.puzzle.categories.find(c => c.words.includes(word)); }
 
     async function submit() {
       if (S.busy || S.over || S.selected.size !== 4) return;
       endCrawl();
       const picked = S.order.filter(w => S.selected.has(w));
-      const key = picked.map(canon).sort().join('|');
+      const key = guessKey(picked);
       if (S.guessed.has(key)) { toast('Already guessed!'); return; }
       S.guessed.add(key);
       S.busy = true; renderControls();
-      S.guesses.push(picked.map(w => catOf(w).color));
+      S.guesses.push(guessColors(picked, S.puzzle.categories));
       await hop(picked);
-      const counts = new Map();
-      for (const w of picked) counts.set(catOf(w), (counts.get(catOf(w)) || 0) + 1);
-      const [best, n] = [...counts.entries()].sort((a, b) => b[1] - a[1])[0];
-      if (n === 4) {
+      const { best, n, verdict } = scoreGuess(picked, S.puzzle.categories);
+      if (verdict === 'correct') {
         await solve(best, false);
         announce(`Correct. ${best.label}: ${best.words.join(', ')}. ${4 - S.solved.length} groups to go.`);
         if (S.solved.length === 4) { S.busy = false; saveProgress(); return finish(true); }
@@ -662,8 +641,8 @@
         renderStatus();
         popDot();
         const left = MAX_MISTAKES - S.mistakes;
-        const msg = n === 3 ? 'One away...' : 'Not quite.';
-        toast(msg, n === 3 ? 'away' : 'miss');
+        const msg = verdict === 'away' ? 'One away...' : 'Not quite.';
+        toast(msg, verdict);
         await shake(picked);
         announce(`${msg} ${left} ${left === 1 ? 'mistake' : 'mistakes'} remaining.`);
         if (S.mistakes >= MAX_MISTAKES) { S.busy = false; return finish(false); }
@@ -764,7 +743,7 @@
     }
 
     function shareText() {
-      const rows = S.guesses.map(g => g.map(c => EMOJI[c]).join('')).join('\n');
+      const rows = shareGrid(S.guesses);
       const where = opts.shareUrl || (location.protocol.startsWith('http') ? location.href : '');
       return `Connections · ${S.pack.name}\n"${S.puzzle.title || 'Puzzle'}"\n${rows}${where ? '\n' + where : ''}`;
     }
@@ -773,10 +752,8 @@
       const T = THEMES[cx.dataset.theme] || THEMES.notebook;
       end.innerHTML = '';
       const h = el('h3', { class: 'cx-end-title', tabindex: '-1', text: won ? T.won : T.lost });
-      const summary = won
-        ? `${S.guesses.length} guesses, ${S.mistakes} ${S.mistakes === 1 ? 'mistake' : 'mistakes'}.`
-        : `${S.solved.filter(c => !c.missed).length} groups found before the mistakes ran out.`;
-      const gridText = S.guesses.map(g => g.map(c => EMOJI[c]).join('')).join('\n');
+      const summary = endSummary({ won, guesses: S.guesses, mistakes: S.mistakes, solved: S.solved });
+      const gridText = shareGrid(S.guesses);
       const copy = el('button', { type: 'button', class: 'cx-btn cx-primary', text: 'Copy result', onclick: async () => {
         const ok = await copyText(shareText());
         toast(ok ? 'Copied. Paste it anywhere.' : 'Could not copy. Select the squares above instead.');
@@ -841,10 +818,7 @@
 
     // ----- URL -----
     function readUrl() {
-      const q = new URLSearchParams(location.search);
-      const pack = q.get('theme');
-      const n = parseInt(q.get('puzzle') || '1', 10);
-      return pack && packs.some(p => p.id === pack) ? [pack, Number.isFinite(n) ? n - 1 : 0] : null;
+      return parseUrl(location.search, packs.map(p => p.id));
     }
     function writeUrl() {
       if (!history.replaceState || S.pack.live) return;
