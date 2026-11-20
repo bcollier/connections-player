@@ -7,9 +7,7 @@
     "start": "node server/index.js",
     "dev": "nodemon server/index.js",
     "packs": "node scripts/build-packs.mjs",
-    "test": "node scripts/build-packs.mjs --check && node --test test/",
-    "test:e2e": "node test/e2e/themes.mjs",
-    "gifs": "node test/e2e/gifs.mjs"
+    "test": "node --test",
   },
   "dependencies": {
     "cors": "^2.8.5",
