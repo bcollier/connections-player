@@ -39,3 +39,11 @@ Tool: Claude Code (VS Code extension), Claude Opus 5.5.
 > This repo is my CMU 15-114 HW9 (Tests as Guardrails). Read notes/HANDOFF.md, notes/PLAN.md and https://www.cs.cmu.edu/~113/hw9.html before doing anything. Follow the rules in HANDOFF.md exactly. In particular, I'm writing the Step 3 test myself with no AI, so don't write or suggest any test code until I say Step 3 is done. Never draft TESTING.md. Append my prompts to prompt_log.md, and pull before you number one.
 
 Used for: reading the handoff and assignment, checking the Node version. Claude declined to write, suggest or explain test code for Step 3 and pointed to the assignment's own example instead.
+
+## 6. What guessKey does (Nov 21, 2026)
+
+Tool: Claude Code (VS Code extension), Claude Opus 5.5.
+
+> explain thiws guessKey(words)	The same four words in any order or case give the same key, so a repeat is caught	Order or case leaks into the key, so a reshuffled repeat costs a mistake
+
+Used for: a plain-English explanation of the guessKey row in notes/PLAN.md and how the game uses it. No test code was written or suggested.
