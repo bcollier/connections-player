@@ -47,3 +47,11 @@ Tool: Claude Code (VS Code extension), Claude Opus 5.5.
 > explain thiws guessKey(words)	The same four words in any order or case give the same key, so a repeat is caught	Order or case leaks into the key, so a reshuffled repeat costs a mistake
 
 Used for: a plain-English explanation of the guessKey row in notes/PLAN.md and how the game uses it. No test code was written or suggested.
+
+## 7. Explaining a failed test run (Nov 21, 2026)
+
+Tool: Claude Code (VS Code extension), Claude Opus 5.5.
+
+> explain the failed test
+
+Used for: explaining Node's ERR_INVALID_MODULE_SPECIFIER error from Ben's hand-written tests/rules.test.js. Claude explained the error message only and did not edit the test file.
