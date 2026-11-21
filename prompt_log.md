@@ -17,3 +17,9 @@ Answer to Claude's two questions. Starting point: "Connections player (Recommend
 > don't put homework in the name of the repo Copy the code into a new repo, e.g. bcollier/connections-hw9-tests. The live game and its Vercel deploys are never touched, and the CI links graders open show only HW9 runs.
 
 Used for: copying bcollier/connections_demo main into a new repo, bcollier/connections-player.
+
+## 3. Where to edit (Nov 21, 2026)
+
+> is there a way for me to edit the code remotely on my laptop or do I need to move this thread over to my laptop
+
+Used for: deciding where Ben writes the Step 3 test by hand. No code was generated.
