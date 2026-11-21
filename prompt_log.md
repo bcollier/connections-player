@@ -23,3 +23,9 @@ Used for: copying bcollier/connections_demo main into a new repo, bcollier/conne
 > is there a way for me to edit the code remotely on my laptop or do I need to move this thread over to my laptop
 
 Used for: deciding where Ben writes the Step 3 test by hand. No code was generated.
+
+## 4. Handoff to the laptop (Nov 21, 2026)
+
+> give me notes to hand to my local claude code
+
+Used for: notes/HANDOFF.md, the briefing for a Claude Code session on Ben's laptop.
