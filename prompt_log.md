@@ -55,3 +55,11 @@ Tool: Claude Code (VS Code extension), Claude Opus 5.5.
 > explain the failed test
 
 Used for: explaining Node's ERR_INVALID_MODULE_SPECIFIER error from Ben's hand-written tests/rules.test.js. Claude explained the error message only and did not edit the test file.
+
+## 8. Fixing the test run (Nov 21, 2026)
+
+Tool: Claude Code (VS Code extension), Claude Opus 5.5.
+
+> fix everything so this test runs
+
+Used for: fixing a trailing comma in package.json (invalid JSON, added in commit 8e57270). Claude did not edit tests/rules.test.js, because of the Step 3 no-AI rule, and asked Ben whether to lift it.

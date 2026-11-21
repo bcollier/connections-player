@@ -7,7 +7,7 @@
     "start": "node server/index.js",
     "dev": "nodemon server/index.js",
     "packs": "node scripts/build-packs.mjs",
-    "test": "node --test",
+    "test": "node --test"
   },
   "dependencies": {
     "cors": "^2.8.5",
