@@ -87,3 +87,11 @@ Tool: Claude Code (CLI, Mac mini session), Claude Opus 5.5.
 > give me step by step directions on what I need to do netx
 
 Used for: a checklist of the remaining steps (the Step 3 failure check, writing TESTING.md, submitting). No TESTING.md text was written.
+
+## 12. Where rules.js came from (Nov 22, 2026)
+
+Tool: Claude Code (CLI, Mac mini session), Claude Opus 5.5.
+
+> remind me did we pull this fcunt ion rules.js from prior code? where did it come from
+
+Used for: an explanation of where each function in player/rules.js came from in the original player/player.js (commit 6806683). No code was written.
