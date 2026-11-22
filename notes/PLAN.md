@@ -24,7 +24,8 @@ The refactor was a move, not a fix. Checked in Node against `player/rules.js` at
 1. **`restoreProgress` accepts a save with repeated words.** It checks that the saved order has 16 entries that are all real words, but not that they are 16 different words. `{ order: ['W0' x16] }` is accepted.
 2. **`restoreProgress` accepts negative mistakes.** `mistakes: -3` survives (it is only capped at the top), so a tampered save gives 7 mistakes left.
 3. **`normalizePuzzle` can give two groups the same color.** A group with no color falls back to the color for its position, even if another group already has it: `[Green, (none)]` becomes `Green, Green`.
-4. Not a bug in play: `parseUrl` turns `?puzzle=0` into index -1, and `setPack` clamps that to 0.
+4. **`endSummary` says "1 groups found"** when a loss found exactly one group: the losing line has no singular form. Found while writing Step 4 tests; the test uses 2 groups so it does not lock the bug in.
+5. Not a bug in play: `parseUrl` turns `?puzzle=0` into index -1, and `setPack` clamps that to 0.
 
 These are good candidates for the optional "test for a real bug" and for Step 5.
 

@@ -63,3 +63,11 @@ Tool: Claude Code (VS Code extension), Claude Opus 5.5.
 > fix everything so this test runs
 
 Used for: fixing a trailing comma in package.json (invalid JSON, added in commit 8e57270). Claude did not edit tests/rules.test.js, because of the Step 3 no-AI rule, and asked Ben whether to lift it.
+
+## 9. Step 3 done (Nov 22, 2026)
+
+Tool: Claude Code (CLI, Mac mini session), Claude Opus 5.5.
+
+> ok i wrote the function what's next
+
+Used for: confirming Ben's hand-written test (commit a6ccd88) passes, then Step 4: building out the suite with boundary and error cases.
