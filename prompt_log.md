@@ -95,3 +95,11 @@ Tool: Claude Code (CLI, Mac mini session), Claude Opus 5.5.
 > remind me did we pull this fcunt ion rules.js from prior code? where did it come from
 
 Used for: an explanation of where each function in player/rules.js came from in the original player/player.js (commit 6806683). No code was written.
+
+## 13. What goes in the verifier section (Nov 22, 2026)
+
+Tool: Claude Code (CLI, Mac mini session), Claude Opus 5.5.
+
+> remind me what goes here ## The verifier experiment: what you asked, what the agent did, the relevant transcript and diff, and what you make of it
+
+Used for: a list of the facts and file locations for that TESTING.md section, plus questions to think about. No TESTING.md text was written.
