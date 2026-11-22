@@ -103,3 +103,11 @@ Tool: Claude Code (CLI, Mac mini session), Claude Opus 5.5.
 > remind me what goes here ## The verifier experiment: what you asked, what the agent did, the relevant transcript and diff, and what you make of it
 
 Used for: a list of the facts and file locations for that TESTING.md section, plus questions to think about. No TESTING.md text was written.
+
+## 14. Ready to submit? (Nov 22, 2026)
+
+Tool: Claude Code (CLI, Mac mini session), Claude Opus 5.5.
+
+> ok we ready to submit?
+
+Used for: checking TESTING.md (commit 3b9a5a6) against the assignment's requirements. Claude listed gaps and did not edit TESTING.md.
