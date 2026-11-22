@@ -1,7 +1,7 @@
 // Trusting a saved game, and keeping only the newest saves.
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { restoreProgress, trimProgress, MAX_MISTAKES } from '../player/rules.js';
+import { restoreProgress, trimProgress } from '../player/rules.js';
 import { ALL_WORDS } from './helpers.js';
 
 const save = extra => ({ order: [...ALL_WORDS].reverse(), mistakes: 2, guesses: [['Yellow', 'Yellow', 'Green', 'Yellow']], guessed: ['A|B|C|D'], over: false, won: false, solved: [], ...extra });
@@ -32,7 +32,7 @@ test('restoreProgress: a good save comes back with its order, guesses and flags'
 });
 
 test('restoreProgress: mistakes are capped at the maximum', () => {
-  assert.equal(restoreProgress(save({ mistakes: 9 }), ALL_WORDS).mistakes, MAX_MISTAKES);
+  assert.equal(restoreProgress(save({ mistakes: 9 }), ALL_WORDS).mistakes, 4); // the game allows four mistakes
   assert.equal(restoreProgress(save({ mistakes: 4 }), ALL_WORDS).mistakes, 4);
 });
 
@@ -54,6 +54,13 @@ test('restoreProgress: changing the restored order does not change the save', ()
 test('trimProgress: keeps the newest saves and drops the oldest', () => {
   const all = { old: { at: 100 }, newest: { at: 300 }, middle: { at: 200 } };
   assert.deepEqual(Object.keys(trimProgress(all, 2)).sort(), ['middle', 'newest']);
+});
+
+test('trimProgress: keeps 40 saves unless told otherwise', () => {
+  const all = Object.fromEntries(Array.from({ length: 45 }, (_, i) => [`game${i}`, { at: i }]));
+  const kept = trimProgress(all);
+  assert.equal(Object.keys(kept).length, 40);
+  assert.ok(!('game4' in kept) && 'game5' in kept);
 });
 
 test('trimProgress: a save with no time counts as the oldest', () => {
