@@ -79,3 +79,11 @@ Tool: Claude Code (CLI, Mac mini session), Claude Opus 5.5.
 > how am I supposed to document step 3 test failing
 
 Used for: an explanation of what the assignment asks for at Step 3 and how to capture the failing run. No test code was written.
+
+## 11. What to do next (Nov 22, 2026)
+
+Tool: Claude Code (CLI, Mac mini session), Claude Opus 5.5.
+
+> give me step by step directions on what I need to do netx
+
+Used for: a checklist of the remaining steps (the Step 3 failure check, writing TESTING.md, submitting). No TESTING.md text was written.
