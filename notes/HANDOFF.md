@@ -30,7 +30,11 @@ To run the app: `python3 -m http.server 8000`, then open http://localhost:8000/?
 
 A Claude Code session on Ben's Mac mini also works in this repo. Always `git pull` before you start and push when you finish a step, so neither side works on stale code.
 
-## What's next
+## Status (Nov 22)
+
+Steps 1 to 8 are done. Raw material: `notes/break-it.md` (Step 5), `notes/ci.md` (Steps 6 and 7), `notes/verifier/` (Step 8). Left: Ben writes TESTING.md (Step 9) and submits (Step 10).
+
+## What's next (original plan)
 
 - **Step 3 (Ben, by hand):** first test in `tests/` (Node finds `*.test.js`; a folder named `tests/` is fine as long as the files end in `.test.js`). Run `node --test`, break one assertion to see it fail, then fix it. Ben commits and pushes it himself.
 - **Step 4:** build out to at least 8 tests across at least 3 functions, with boundary and error cases: empty input, zero, negative, missing properties, wrong types, ties such as a 2+2 split in `scoreGuess`. Ben reads every test. Commit the tests only.

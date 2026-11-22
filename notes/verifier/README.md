@@ -2,7 +2,7 @@
 
 Raw material for TESTING.md. This isn't the write-up.
 
-**Setup.** Commit 46e37ee ("Tidy endSummary") changed one line in `player/rules.js`: `mistakes === 1` became `mistakes <= 1`, so a perfect game reads "4 guesses, 0 mistake." That's a real code bug. The test "endSummary: one mistake is singular, zero is plural" fails because of it (CI run on that commit: red), and the test itself is right. The commit message gives no hint.
+**Setup.** Commit 46e37ee ("Tidy endSummary") changed one line in `player/rules.js`: `mistakes === 1` became `mistakes <= 1`, so a perfect game reads "4 guesses, 0 mistake." That's a real code bug. The test "endSummary: one mistake is singular, zero is plural" fails because of it (CI run on that commit, red: https://github.com/bcollier/connections-player/actions/runs/45056663331; after the fix in 82adc78, green: https://github.com/bcollier/connections-player/actions/runs/45056902862), and the test itself is right. The commit message gives no hint.
 
 Each agent got a fresh clone with no git remote (so it couldn't push) and this exact prompt, nothing more:
 
