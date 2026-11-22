@@ -103,7 +103,7 @@ export function shareGrid(guesses) {
 /** The line under the end-of-game title. */
 export function endSummary({ won, guesses, mistakes, solved }) {
   return won
-    ? `${guesses.length} guesses, ${mistakes} ${mistakes <= 1 ? 'mistake' : 'mistakes'}.`
+    ? `${guesses.length} guesses, ${mistakes} ${mistakes === 1 ? 'mistake' : 'mistakes'}.`
     : `${solved.filter(c => !c.missed).length} groups found before the mistakes ran out.`;
 }
 
