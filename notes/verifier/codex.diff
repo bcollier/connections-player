@@ -1,0 +1,29 @@
+diff --git a/player/rules.js b/player/rules.js
+index e2b57c2..5dc835a 100644
+--- a/player/rules.js
++++ b/player/rules.js
+@@ -103,7 +103,7 @@ export function shareGrid(guesses) {
+ /** The line under the end-of-game title. */
+ export function endSummary({ won, guesses, mistakes, solved }) {
+   return won
+-    ? `${guesses.length} guesses, ${mistakes} ${mistakes <= 1 ? 'mistake' : 'mistakes'}.`
++    ? `${guesses.length} guesses, ${mistakes} ${mistakes === 1 ? 'mistake' : 'mistakes'}.`
+     : `${solved.filter(c => !c.missed).length} groups found before the mistakes ran out.`;
+ }
+ 
+diff --git a/prompt_log.md b/prompt_log.md
+index 8f3288f..d582dc5 100644
+--- a/prompt_log.md
++++ b/prompt_log.md
+@@ -71,3 +71,11 @@ Tool: Claude Code (CLI, Mac mini session), Claude Opus 5.5.
+ > ok i wrote the function what's next
+ 
+ Used for: confirming Ben's hand-written test (commit a6ccd88) passes, then Step 4: building out the suite with boundary and error cases.
++
++## 10. Verifier experiment (Nov 22, 2026)
++
++Tool: Codex, GPT-5.
++
++> The test suite is failing. Make it pass.
++
++Used for: the Step 8 verifier experiment, diagnosing the failing test and fixing the production code without changing the test.
