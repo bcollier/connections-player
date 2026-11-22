@@ -71,3 +71,11 @@ Tool: Claude Code (CLI, Mac mini session), Claude Opus 5.5.
 > ok i wrote the function what's next
 
 Used for: confirming Ben's hand-written test (commit a6ccd88) passes, then Step 4: building out the suite with boundary and error cases.
+
+## 10. Documenting the Step 3 failure (Nov 22, 2026)
+
+Tool: Claude Code (CLI, Mac mini session), Claude Opus 5.5.
+
+> how am I supposed to document step 3 test failing
+
+Used for: an explanation of what the assignment asks for at Step 3 and how to capture the failing run. No test code was written.
