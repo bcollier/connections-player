@@ -66,7 +66,7 @@ export function scoreGuess(picked, categories) {
   const counts = new Map();
   for (const w of picked) counts.set(categoryOf(w, categories), (counts.get(categoryOf(w, categories)) || 0) + 1);
   const [best, n] = [...counts.entries()].sort((a, b) => b[1] - a[1])[0];
-  return { best, n, verdict: n === 4 ? 'correct' : n === 3 ? 'away' : 'miss' };
+  return { best, n, verdict: n === 4 ? 'correct' : n >= 2 ? 'away' : 'miss' };
 }
 
 /**
